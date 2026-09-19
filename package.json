@@ -1,0 +1,36 @@
+{
+  "name": "@kuro-shiba/image-compressor",
+  "version": "1.0.0",
+  "description": "WordPress向け画像最適化コア、CLI、ドラッグ＆ドロップUI",
+  "private": true,
+  "type": "commonjs",
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "require": "./src/index.js",
+      "default": "./src/index.js"
+    }
+  },
+  "bin": {
+    "image-compressor": "src/cli.js"
+  },
+  "scripts": {
+    "compress": "node src/cli.js",
+    "ui": "node src/server.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "sharp": "^0.35.4"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "sharp"
+    ]
+  },
+  "packageManager": "pnpm@10.33.0"
+}

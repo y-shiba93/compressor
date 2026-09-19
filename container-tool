@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT=$(cd "$(dirname "$0")" && pwd)
+IMAGE="kuro-shiba-compressor:node24"
+
+case "${1:-}" in
+  build)
+    container build --pull -f "$ROOT/Containerfile" -t "$IMAGE" "$ROOT"
+    ;;
+  ui)
+    container run --rm -i -p 4173:4173 "$IMAGE"
+    ;;
+  test)
+    container run --rm -i -v "$ROOT:/workspace" -w /workspace "$IMAGE" pnpm test
+    ;;
+  *)
+    echo "使い方: ./container-tool {build|ui|test}" >&2
+    exit 1
+    ;;
+esac

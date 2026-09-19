@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>画像コンプレッサー</title>
+    <meta name="description" content="WordPress投稿向けに画像をリサイズ・圧縮します。">
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <main>
+      <header>
+        <p class="eyebrow">KURO SHIBA TOOLS</p>
+        <h1>画像を、投稿にちょうどいい軽さへ。</h1>
+        <p class="lead">最大幅1600px・目標350KBで、WordPress向けに画像を整えます。画像はこの端末内で起動したサーバーだけに送信されます。</p>
+      </header>
+
+      <section id="drop-zone" class="drop-zone" tabindex="0" role="button" aria-label="画像を選択">
+        <div class="drop-icon" aria-hidden="true">↓</div>
+        <h2>ここに画像をドロップ</h2>
+        <p>またはクリックして選択</p>
+        <p class="formats">JPG・PNG・WebP・GIF・SVG / 1ファイル50MBまで</p>
+        <input id="file-input" type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml" multiple hidden>
+      </section>
+
+      <section class="results" aria-live="polite">
+        <div class="results-heading">
+          <h2>処理結果</h2>
+          <button id="download-all" class="secondary" type="button" hidden>すべて保存</button>
+        </div>
+        <p id="empty-state" class="empty">画像を追加すると、ここに結果が表示されます。</p>
+        <ul id="result-list"></ul>
+      </section>
+    </main>
+    <script src="/app.js" defer></script>
+  </body>
+</html>
