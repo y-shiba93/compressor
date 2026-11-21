@@ -8,14 +8,21 @@ case "${1:-}" in
   build)
     container build --pull -f "$ROOT/Containerfile" -t "$IMAGE" "$ROOT"
     ;;
+  setup-https)
+    "$ROOT/scripts/setup-local-https.sh"
+    ;;
   ui)
-    container run --rm -i -p 4173:4173 "$IMAGE"
+    if [[ ! -f "$ROOT/.certs/server.crt" || ! -f "$ROOT/.certs/server.key" ]]; then
+      echo "証明書がありません。先に ./container-tool setup-https を実行してください" >&2
+      exit 1
+    fi
+    container run --rm -i -p 80:80 -p 443:443 -v "$ROOT/.certs:/certs:ro" "$IMAGE"
     ;;
   test)
     container run --rm -i -v "$ROOT:/workspace" -w /workspace "$IMAGE" pnpm test
     ;;
   *)
-    echo "使い方: ./container-tool {build|ui|test}" >&2
+    echo "使い方: ./container-tool {build|setup-https|ui|test}" >&2
     exit 1
     ;;
 esac

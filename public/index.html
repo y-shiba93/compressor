@@ -1,37 +1,207 @@
 <!doctype html>
 <html lang="ja">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>画像コンプレッサー</title>
-    <meta name="description" content="WordPress投稿向けに画像をリサイズ・圧縮します。">
-    <link rel="stylesheet" href="/styles.css">
-  </head>
-  <body>
-    <main>
-      <header>
-        <p class="eyebrow">KURO SHIBA TOOLS</p>
-        <h1>画像を、投稿にちょうどいい軽さへ。</h1>
-        <p class="lead">最大幅1600px・目標350KBで、WordPress向けに画像を整えます。画像はこの端末内で起動したサーバーだけに送信されます。</p>
-      </header>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>画像圧縮・変換・カラー変更ツール</title>
+        <meta
+            name="description"
+            content="画像の圧縮、PNG・WebP・JPEGの相互変換、指定色の変更を行います。"
+        />
+        <link rel="icon" href="/favicon.webp" type="image/webp" />
+        <link rel="stylesheet" href="/styles.css" />
+    </head>
+    <body data-mode="compress">
+        <main>
+            <header>
+                <p class="eyebrow">KURO SHIBA TOOLS</p>
+                <h1 id="page-title">画像を、投稿にちょうどいい軽さへ。</h1>
+                <p id="page-lead" class="lead">
+                    最大幅1600px・目標350KBで、WordPress向けに画像を整えます。画像はこの端末内で起動したサーバーだけに送信されます。
+                </p>
+            </header>
 
-      <section id="drop-zone" class="drop-zone" tabindex="0" role="button" aria-label="画像を選択">
-        <div class="drop-icon" aria-hidden="true">↓</div>
-        <h2>ここに画像をドロップ</h2>
-        <p>またはクリックして選択</p>
-        <p class="formats">JPG・PNG・WebP・GIF・SVG / 1ファイル50MBまで</p>
-        <input id="file-input" type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml" multiple hidden>
-      </section>
+            <nav class="tabs" role="tablist" aria-label="処理を選択">
+                <button
+                    id="compress-tab"
+                    class="tab is-active"
+                    type="button"
+                    role="tab"
+                    aria-selected="true"
+                    data-mode="compress"
+                >
+                    圧縮
+                </button>
+                <button
+                    id="convert-tab"
+                    class="tab"
+                    type="button"
+                    role="tab"
+                    aria-selected="false"
+                    data-mode="convert"
+                >
+                    変換
+                </button>
+                <button
+                    id="color-tab"
+                    class="tab"
+                    type="button"
+                    role="tab"
+                    aria-selected="false"
+                    data-mode="color"
+                >
+                    カラー変更
+                </button>
+            </nav>
 
-      <section class="results" aria-live="polite">
-        <div class="results-heading">
-          <h2>処理結果</h2>
-          <button id="download-all" class="secondary" type="button" hidden>すべて保存</button>
-        </div>
-        <p id="empty-state" class="empty">画像を追加すると、ここに結果が表示されます。</p>
-        <ul id="result-list"></ul>
-      </section>
-    </main>
-    <script src="/app.js" defer></script>
-  </body>
+            <section id="conversion-options" class="conversion-options" hidden>
+                <fieldset class="format-choices">
+                    <legend>変換後の形式</legend>
+                    <label
+                        ><input
+                            type="radio"
+                            name="output-format"
+                            value="jpeg"
+                        /><span>JPEG</span></label
+                    >
+                    <label
+                        ><input
+                            type="radio"
+                            name="output-format"
+                            value="png"
+                        /><span>PNG</span></label
+                    >
+                    <label
+                        ><input
+                            type="radio"
+                            name="output-format"
+                            value="webp"
+                            checked
+                        /><span>WebP</span></label
+                    >
+                </fieldset>
+                <p>JPEGへの変換時、透過部分は白になります。</p>
+            </section>
+
+            <section id="color-options" class="color-options" hidden>
+                <div class="color-fields">
+                    <label class="color-field">
+                        <span>変更前</span>
+                        <span class="color-inputs">
+                            <input
+                                id="source-color-picker"
+                                type="color"
+                                value="#d75b36"
+                                aria-label="変更前カラーを選択"
+                            />
+                            <input
+                                id="source-color"
+                                type="text"
+                                value="#D75B36"
+                                maxlength="7"
+                                spellcheck="false"
+                                aria-label="変更前カラーコード"
+                            />
+                        </span>
+                    </label>
+                    <span class="color-arrow" aria-hidden="true">→</span>
+                    <label class="color-field">
+                        <span>変更後</span>
+                        <span class="color-inputs">
+                            <input
+                                id="target-color-picker"
+                                type="color"
+                                value="#4d978f"
+                                aria-label="変更後カラーを選択"
+                            />
+                            <input
+                                id="target-color"
+                                type="text"
+                                value="#4D978F"
+                                maxlength="7"
+                                spellcheck="false"
+                                aria-label="変更後カラーコード"
+                            />
+                        </span>
+                    </label>
+                </div>
+                <label class="tolerance-field" for="color-tolerance">
+                    <span
+                        >色の許容範囲
+                        <strong id="tolerance-value">20</strong></span
+                    >
+                    <input
+                        id="color-tolerance"
+                        type="range"
+                        min="0"
+                        max="100"
+                        value="20"
+                    />
+                    <span class="range-labels"
+                        ><span>完全一致</span><span>広い</span></span
+                    >
+                </label>
+                <label class="format-field" for="color-output-format">
+                    <span>保存形式</span>
+                    <span class="select-wrapper">
+                        <select id="color-output-format">
+                            <option value="png" selected>PNG</option>
+                            <option value="webp">WebP</option>
+                            <option value="jpeg">JPEG</option>
+                        </select>
+                    </span>
+                </label>
+                <div id="color-preview" class="color-preview" hidden>
+                    <p>
+                        画像をクリックすると、その位置の色を「変更前」に設定できます。
+                    </p>
+                    <canvas id="preview-canvas"></canvas>
+                    <button id="replace-color" class="primary" type="button">
+                        カラーを変更
+                    </button>
+                </div>
+            </section>
+
+            <section
+                id="drop-zone"
+                class="drop-zone"
+                tabindex="0"
+                role="button"
+                aria-label="画像を選択"
+            >
+                <div class="drop-icon" aria-hidden="true">↓</div>
+                <h2>ここに画像をドロップ</h2>
+                <p>またはクリックして選択</p>
+                <p id="accepted-formats" class="formats">
+                    JPG・PNG・WebP・GIF・SVG / 1ファイル50MBまで
+                </p>
+                <input
+                    id="file-input"
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml"
+                    multiple
+                    hidden
+                />
+            </section>
+
+            <section class="results" aria-live="polite">
+                <div class="results-heading">
+                    <h2>処理結果</h2>
+                    <button
+                        id="download-all"
+                        class="secondary"
+                        type="button"
+                        hidden
+                    >
+                        すべて保存
+                    </button>
+                </div>
+                <p id="empty-state" class="empty">
+                    画像を追加すると、ここに結果が表示されます。
+                </p>
+                <ul id="result-list"></ul>
+            </section>
+        </main>
+        <script src="/app.js" defer></script>
+    </body>
 </html>
