@@ -3,7 +3,7 @@ set -euo pipefail
 
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 CERT_DIR="$ROOT/.certs"
-DOMAIN="local.compressor.kuro-shiba.com"
+DOMAIN="local.compressor.tools.kuro-shiba.com"
 mkdir -p "$CERT_DIR"
 
 cat > "$CERT_DIR/openssl.cnf" <<EOF

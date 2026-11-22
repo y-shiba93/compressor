@@ -2,7 +2,7 @@
 	admin off
 }
 
-local.compressor.kuro-shiba.com {
+local.compressor.tools.kuro-shiba.com {
 	tls /certs/server.crt /certs/server.key
 	reverse_proxy 127.0.0.1:4173
 }

@@ -48,7 +48,7 @@ pnpm ui
 Apple Containerを利用する場合は、初回だけローカルドメインを`/etc/hosts`へ登録します。
 
 ```sh
-sudo sh -c 'echo "127.0.0.1 local.compressor.kuro-shiba.com" >> /etc/hosts'
+sudo sh -c 'echo "127.0.0.1 local.compressor.tools.kuro-shiba.com" >> /etc/hosts'
 ./container-tool setup-https
 ./container-tool build
 ./container-tool ui
@@ -56,7 +56,7 @@ sudo sh -c 'echo "127.0.0.1 local.compressor.kuro-shiba.com" >> /etc/hosts'
 
 `setup-https`はローカルCAとサーバー証明書を`.certs/`へ生成し、CAをmacOSのログインキーチェーンへ信頼登録します。秘密鍵と証明書はGit管理されません。
 
-Caddyがポート443でHTTPSリクエストを受け、コンテナ内のNode UIへ転送します。HTTPアクセスはHTTPSへリダイレクトされます。ブラウザで <https://local.compressor.kuro-shiba.com> を開いてください。
+Caddyがポート443でHTTPSリクエストを受け、コンテナ内のNode UIへ転送します。HTTPアクセスはHTTPSへリダイレクトされます。ブラウザで <https://local.compressor.tools.kuro-shiba.com> を開いてください。
 
 `/etc/hosts`へ同じ行を重複して追加しないでください。すでに登録済みの場合は追加不要です。
 
