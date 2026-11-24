@@ -16,7 +16,7 @@ case "${1:-}" in
       echo "証明書がありません。先に ./container-tool setup-https を実行してください" >&2
       exit 1
     fi
-    container run --rm -i -p 80:80 -p 443:443 -v "$ROOT/.certs:/certs:ro" "$IMAGE"
+    container run --rm -i -p 127.0.0.1:8443:443 -v "$ROOT/.certs:/certs:ro" "$IMAGE"
     ;;
   test)
     container run --rm -i -v "$ROOT:/workspace" -w /workspace "$IMAGE" pnpm test

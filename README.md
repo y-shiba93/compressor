@@ -56,7 +56,7 @@ sudo sh -c 'echo "127.0.0.1 local.compressor.tools.kuro-shiba.com" >> /etc/hosts
 
 `setup-https`はローカルCAとサーバー証明書を`.certs/`へ生成し、CAをmacOSのログインキーチェーンへ信頼登録します。秘密鍵と証明書はGit管理されません。
 
-Caddyがポート443でHTTPSリクエストを受け、コンテナ内のNode UIへ転送します。HTTPアクセスはHTTPSへリダイレクトされます。ブラウザで <https://local.compressor.tools.kuro-shiba.com> を開いてください。
+Caddyがコンテナ内の443番でHTTPSリクエストを受け、Node UIへ転送します。ホスト側は `127.0.0.1:8443` のみ公開し、80/443番はURL短縮サービスなどに譲ります。ブラウザで <https://local.compressor.tools.kuro-shiba.com:8443/> を開いてください。ポートなしのURLやHTTPからの自動転送はありません。
 
 `/etc/hosts`へ同じ行を重複して追加しないでください。すでに登録済みの場合は追加不要です。
 
